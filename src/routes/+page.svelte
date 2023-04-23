@@ -147,14 +147,19 @@
 	}
 </script>
 
-<main class="flex flex-col items-center gap-6 mt-12">
-	<h1 class="text-5xl">Nayoblind</h1>
+<main class="flex flex-col items-center gap-4">
+	<div class="hero bg-base-200 mb-2">
+		<div class="hero-content text-center">
+			<div class="max-w-md">
+				<h1 class="py-4 text-5xl font-bold">Nayoblind</h1>
+				<p class="py-4 neutral-content">ทดสอบความจำนโยบายเลือกตั้ง 2566</p>
+			</div>
+		</div>
+	</div>
 
 	{#if gameState === 'MENU'}
-		<p>ทดสอบความจำนโยบายเลือกตั้ง 2566</p>
-
 		<div class="card bg-neutral shadow-xl">
-			<div class="card-body">
+			<div class="card-body items-center text-center">
 				<div class="card-title">Party Mode - เลือกพรรคแล้วทายนโยบาย (ง่าย)</div>
 				<p class="flex gap-4 mt-4 flex-wrap">
 					{#each parties as party}
@@ -167,7 +172,7 @@
 		</div>
 
 		<div class="card bg-neutral shadow-xl">
-			<div class="card-body">
+			<div class="card-body items-center text-center">
 				<div class="card-title">Blind Mode - ทายชื่อพรรคจากนโยบาย (ยาก)</div>
 				<p class="mt-4 mx-auto">
 					<button on:click={() => playBlindMode()} class="btn btn-primary"
@@ -176,7 +181,6 @@
 				</p>
 			</div>
 		</div>
-		<div class="card" />
 	{:else if gameState === 'PARTY'}
 		<h2 class="border rounded px-4 py-2">Party Mode - พรรค{partyModeOptions.party.name}</h2>
 
@@ -221,9 +225,10 @@
 		></script>
 
 		{#if showFbComments}
-			<div class="card bg-neutral shadow-xl min-w-[480px]">
+			<hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700 w-full" />
+			<div class="card shadow-xl bg-neutral w-full max-w-lg">
 				<div class="card-body">
-					<div class="card-title text-sm">Feedback & Suggestions</div>
+					<div class="card-title text-sm mb-4">คอมเม้นต์ + เสนอแนะ</div>
 
 					<div
 						class="fb-comments"
