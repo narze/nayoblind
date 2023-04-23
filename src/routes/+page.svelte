@@ -72,16 +72,21 @@
 	$: currentPolicyId = ~~(Math.random() * policies.length);
 	$: currentPolicy = policies[currentPolicyId];
 
+	let gameState: 'MENU' | 'PARTY' | 'BLIND' = 'MENU';
+
 	let points = 0;
 
 	function chooseParty(partyId: number) {
+		const rightParty = parties.find(({ id }) => id == currentPolicy.partyId)!;
+
 		if (partyId === currentPolicy.partyId) {
-			alert('ถูกต้อง ✅');
+			alert(`ถูกต้อง ✅ นโยบายนี้เป็นของ พรรค${rightParty.name}`);
 			points += 1;
 		} else {
-			const rightParty = parties.find(({ id }) => id == currentPolicy.partyId)!;
-			alert(`ผิด ❌ คำตอบที่ถูกต้องคือ พรรค${rightParty.name} คุณได้ทั้งหมด ${points} คะแนน`);
+			alert(`ผิด ❌ นโยบายนี้เป็นของ พรรค${rightParty.name} \n คุณได้ทั้งหมด ${points} คะแนน`);
 			points = 0;
+
+			gameState = 'MENU';
 		}
 
 		let newPolicy;
@@ -92,25 +97,101 @@
 
 		currentPolicyId = newPolicy;
 	}
+
+	function answerBlindMode(answer: boolean) {
+		const rightParty = parties.find(({ id }) => id == currentPolicy.partyId)!;
+
+		if (answer == (currentPolicy.partyId == partyModeOptions.partyId)) {
+			alert(`ถูกต้อง ✅ นโยบายนี้เป็นของ พรรค${rightParty.name}`);
+			points += 1;
+		} else {
+			alert(`ผิด ❌ นโยบายนี้เป็นของ พรรค${rightParty.name} \n คุณได้ทั้งหมด ${points} คะแนน`);
+			points = 0;
+			gameState = 'MENU';
+		}
+
+		let newPolicy;
+
+		do {
+			newPolicy = ~~(Math.random() * policies.length);
+		} while (currentPolicyId == newPolicy);
+
+		currentPolicyId = newPolicy;
+	}
+
+	const partyModeOptions = {} as Record<string, any>;
+
+	function playPartyMode(partyId: number) {
+		gameState = 'PARTY';
+		partyModeOptions.partyId = partyId;
+		partyModeOptions.party = parties.find(({ id }) => id == partyId)!;
+	}
+
+	function playBlindMode() {
+		gameState = 'BLIND';
+	}
 </script>
 
 <main class="flex flex-col items-center gap-6 mt-12">
-	<h1 class="text-3xl">Nayoblind</h1>
+	<h1 class="text-5xl">Nayoblind</h1>
 
-	<h2 class="border rounded px-4 py-2">นโยบาย: {currentPolicy.policy}</h2>
+	{#if gameState === 'MENU'}
+		<p>ทดสอบความจำนโยบายเลือกตั้ง 2566</p>
 
-	<h2>เป็นของพรรค...</h2>
+		<div class="card bg-neutral shadow-xl">
+			<div class="card-body">
+				<div class="card-title">Party Mode - เลือกพรรคแล้วทายนโยบาย (ง่าย)</div>
+				<p class="flex gap-4 mt-4 flex-wrap">
+					{#each parties as party}
+						<button on:click={() => playPartyMode(party.id)} class="btn btn-primary">
+							พรรค{party.name}
+						</button>
+					{/each}
+				</p>
+			</div>
+		</div>
 
-	<p class="flex gap-4">
-		{#each parties as party}
-			<button on:click={() => chooseParty(party.id)} class="btn">
-				พรรค{party.name}
-			</button>
-		{/each}
-	</p>
+		<div class="card bg-neutral shadow-xl">
+			<div class="card-body">
+				<div class="card-title">Blind Mode - ทายชื่อพรรคจากนโยบาย (ยาก)</div>
+				<p class="mt-4 mx-auto">
+					<button on:click={() => playBlindMode()} class="btn btn-primary"
+						>เริ่มเล่น Blind Mode</button
+					>
+				</p>
+			</div>
+		</div>
+		<div class="card" />
+	{:else if gameState === 'PARTY'}
+		<h2 class="border rounded px-4 py-2">Party Mode - พรรค{partyModeOptions.party.name}</h2>
 
-	{#if points > 0}
-		<p class="text-2xl">{points} คะแนน</p>
+		<h2>นโยบาย: {currentPolicy.policy}</h2>
+		<h2>เป็นของ พรรค{partyModeOptions.party.name} หรือไม่</h2>
+
+		<p class="flex gap-4">
+			<button on:click={() => answerBlindMode(true)} class="btn btn-success"> ใช่ </button>
+			<button on:click={() => answerBlindMode(false)} class="btn btn-error"> ไม่ใช่ </button>
+		</p>
+
+		{#if points > 0}
+			<p class="text-2xl">{points} คะแนน</p>
+		{/if}
+	{:else if gameState === 'BLIND'}
+		<h2 class="border rounded px-4 py-2">นโยบาย: {currentPolicy.policy}</h2>
+
+		<h2>เป็นของพรรคใด</h2>
+
+		<p class="flex gap-4">
+			{#each parties as party}
+				<button on:click={() => chooseParty(party.id)} class="btn btn-primary">
+					พรรค{party.name}
+				</button>
+			{/each}
+		</p>
+
+		{#if points > 0}
+			<p class="text-2xl">{points} คะแนน</p>
+		{/if}
 	{/if}
 </main>
 
