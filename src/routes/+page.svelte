@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import Head from '../head.svelte';
 
 	let darkMode =
 		browser &&
@@ -244,6 +245,14 @@
 		gameState = 'BLIND';
 	}
 </script>
+
+<Head
+	title="Nayoblind"
+	description="ทดสอบความจำนโยบายเลือกตั้ง 2566"
+	url="https://nayoblind.vercel.app"
+	imageUrl="https://raw.githubusercontent.com/narze/timelapse/main/projects/nayoblind_home.png"
+	gtagId="G-17QSJGM9H5"
+/>
 
 <main class="flex flex-col items-center gap-4">
 	<div class="hero bg-base-200 mb-2">
