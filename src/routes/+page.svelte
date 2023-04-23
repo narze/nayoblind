@@ -1,4 +1,19 @@
 <script lang="ts">
+	import { browser } from '$app/environment';
+
+	let darkMode =
+		browser &&
+		window &&
+		window.matchMedia &&
+		window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+	let showFbComments = false;
+	if (browser && window) {
+		window.fbAsyncInit = function () {
+			showFbComments = true;
+		};
+	}
+
 	const parties = [
 		{
 			id: 1,
@@ -191,6 +206,34 @@
 
 		{#if points > 0}
 			<p class="text-2xl">{points} คะแนน</p>
+		{/if}
+	{/if}
+
+	{#if browser && window}
+		<div id="fb-root" />
+
+		<script
+			async
+			defer
+			crossorigin="anonymous"
+			src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v16.0&appId=279907418704450&autoLogAppEvents=1"
+			nonce="F4yGVCO6"
+		></script>
+
+		{#if showFbComments}
+			<div class="card bg-neutral shadow-xl min-w-[480px]">
+				<div class="card-body">
+					<div class="card-title text-sm">Feedback & Suggestions</div>
+
+					<div
+						class="fb-comments"
+						data-href="https://nayoblind.vercel.app/"
+						data-width="100%"
+						data-numposts="10"
+						data-colorscheme={darkMode ? 'dark' : 'light'}
+					/>
+				</div>
+			</div>
 		{/if}
 	{/if}
 </main>
