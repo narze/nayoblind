@@ -1,13 +1,31 @@
 <script lang="ts">
 	import { browser } from '$app/environment';
+	import { onMount } from 'svelte';
+	import { themeChange } from 'theme-change';
+
 	import Head from '../head.svelte';
 	import Adsense from '../adsense.svelte';
 
-	let darkMode =
-		browser &&
-		window &&
-		window.matchMedia &&
-		window.matchMedia('(prefers-color-scheme: dark)').matches;
+	let darkMode = false;
+
+	onMount(() => {
+		themeChange(false);
+		if (browser) {
+			const htmlTheme = document.querySelector('html')?.dataset.theme;
+
+			if (htmlTheme === 'business') {
+				// console.log('html theme="dark"')
+				darkMode = true;
+			} else if (
+				!htmlTheme &&
+				window.matchMedia &&
+				window.matchMedia('(prefers-color-scheme: dark)').matches
+			) {
+				// console.log('system theme = "dark"')
+				darkMode = true;
+			}
+		}
+	});
 
 	let showFbComments = false;
 	if (browser && window) {
@@ -290,6 +308,21 @@
 					>
 				</p>
 			</div>
+		</div>
+
+		<div class="flex flex-row justify-center items-center w-32 gap-1">
+			🌞
+			<div class="w-10">
+				<span
+					data-toggle-theme="corporate,business"
+					data-act-class="pl-4"
+					class="border rounded-full border-primary flex items-center cursor-pointer w-10 transition-all duration-300 ease-in-out pl-0"
+					class:pl-4={darkMode}
+				>
+					<span class="rounded-full w-3 h-3 m-1 bg-primary" />
+				</span>
+			</div>
+			🌚
 		</div>
 	{:else if gameState === 'PARTY'}
 		<h2 class="border rounded px-4 py-2">Party Mode - พรรค{partyModeOptions.party.name}</h2>

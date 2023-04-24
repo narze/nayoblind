@@ -8,7 +8,7 @@ const config = {
 	},
 
 	plugins: [daisyui],
-
+	// darkMode: ['class', '[data-theme="business"]'],
 	daisyui: {
 		themes: ['corporate', 'business'],
 		darkTheme: 'business'
