@@ -10,5 +10,6 @@
 		<span class="flex items-center">แชร์:</span>
 		<Facebook class="h-10 w-10 rounded-full" {url} quote={text} />
 		<Twitter class="h-10 w-10 rounded-full" {url} {text} hashtags="nayoblind" />
+		<Line class="h-10 w-10 rounded-full" {url} {text} />
 	</div>
 {/if}
