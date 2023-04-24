@@ -414,7 +414,9 @@
 				<p class="text-center">{@html message}</p>
 			{/if}
 
-			<Share text={`ได้ ${points} คะแนน จากการทายนโยบายพรรค ${partyModeOptions.party.name}`} />
+			<Share
+				text={`ได้ ${points} คะแนน จากการทายนโยบายเลือกตั้ง '66 พรรค ${partyModeOptions.party.name}`}
+			/>
 
 			<button on:click={() => (gameState = 'MENU')} class="btn btn-primary"> กลับหน้าแรก </button>
 		{/if}
@@ -456,7 +458,7 @@
 				<p class="text-center">{@html message}</p>
 			{/if}
 
-			<Share text={`ได้ ${points} คะแนน จากการทายนโยบาย`} />
+			<Share text={`ได้ ${points} คะแนน จากการทายนโยบายเลือกตั้ง '66`} />
 
 			<button on:click={() => (gameState = 'MENU')} class="btn btn-primary"> กลับหน้าแรก </button>
 		{/if}
