@@ -7,6 +7,11 @@
 	import Adsense from '../adsense.svelte';
 
 	let darkMode = false;
+	let continueGame = false;
+	let showChoices = false;
+	let lastAnswer = false;
+	let lastAnswerParty = '';
+	let message = '';
 
 	onMount(() => {
 		themeChange(false);
@@ -210,59 +215,81 @@
 
 	let points = 0;
 
-	function chooseParty(partyId: number) {
+	function choosePartyBlindMode(partyId: number) {
+		showChoices = false;
+
+		const chosenParty = parties.find(({ id }) => id == partyId)!;
+		lastAnswerParty = `พรรค${chosenParty.name}`;
 		const rightParty = parties.find(({ id }) => id == currentPolicy.partyId)!;
 
 		if (partyId === currentPolicy.partyId) {
-			alert(`ถูกต้อง ✅ นโยบายนี้เป็นของ พรรค${rightParty.name}`);
+			feedback(true, `ถูกต้อง ✅ <br>นโยบายนี้เป็นของ พรรค${rightParty.name}`);
 			points += 1;
 		} else {
-			alert(`ผิด ❌ นโยบายนี้เป็นของ พรรค${rightParty.name} \n คุณได้ทั้งหมด ${points} คะแนน`);
-			points = 0;
-
-			gameState = 'MENU';
+			feedback(
+				false,
+				`ผิด ❌ นโยบายนี้เป็นของ พรรค${rightParty.name}<br>คุณได้ทั้งหมด ${points} คะแนน`
+			);
 		}
-
-		let newPolicy;
-
-		do {
-			newPolicy = ~~(Math.random() * policies.length);
-		} while (currentPolicyId == newPolicy);
-
-		currentPolicyId = newPolicy;
 	}
 
-	function answerBlindMode(answer: boolean) {
+	function answerPartyMode(answer: boolean) {
+		lastAnswer = answer;
+		showChoices = false;
+
 		const rightParty = parties.find(({ id }) => id == currentPolicy.partyId)!;
 
 		if (answer == (currentPolicy.partyId == partyModeOptions.partyId)) {
-			alert(`ถูกต้อง ✅ นโยบายนี้เป็นของ พรรค${rightParty.name}`);
+			feedback(true, `ถูกต้อง ✅ <br>นโยบายนี้เป็นของ พรรค${rightParty.name}`);
 			points += 1;
 		} else {
-			alert(`ผิด ❌ นโยบายนี้เป็นของ พรรค${rightParty.name} \n คุณได้ทั้งหมด ${points} คะแนน`);
-			points = 0;
-			gameState = 'MENU';
+			feedback(
+				false,
+				`ผิด ❌ นโยบายนี้เป็นของ พรรค${rightParty.name}<br>คุณได้ทั้งหมด ${points} คะแนน`
+			);
 		}
+	}
 
-		let newPolicy;
-
-		do {
-			newPolicy = ~~(Math.random() * policies.length);
-		} while (currentPolicyId == newPolicy);
-
-		currentPolicyId = newPolicy;
+	function nextQuestion() {
+		getNextPolicy();
+		showChoices = true;
 	}
 
 	const partyModeOptions = {} as Record<string, any>;
 
 	function playPartyMode(partyId: number) {
+		getNextPolicy();
+		points = 0;
+		message = '';
+		continueGame = true;
+		showChoices = true;
 		gameState = 'PARTY';
 		partyModeOptions.partyId = partyId;
 		partyModeOptions.party = parties.find(({ id }) => id == partyId)!;
 	}
 
 	function playBlindMode() {
+		getNextPolicy();
+		points = 0;
+		message = '';
+		continueGame = true;
+		showChoices = true;
 		gameState = 'BLIND';
+	}
+
+	function getNextPolicy() {
+		let newPolicy;
+
+		do {
+			newPolicy = ~~(Math.random() * policies.length);
+		} while (currentPolicyId == newPolicy);
+
+		currentPolicyId = newPolicy;
+	}
+
+	function feedback(isRightAnswer: boolean, _message: string) {
+		message = _message;
+		continueGame = isRightAnswer;
 	}
 </script>
 
@@ -356,29 +383,77 @@
 		<h2>นโยบาย: {currentPolicy.policy}</h2>
 		<h2>เป็นของ พรรค{partyModeOptions.party.name} หรือไม่</h2>
 
-		<p class="flex gap-4">
-			<button on:click={() => answerBlindMode(true)} class="btn btn-success"> ใช่ </button>
-			<button on:click={() => answerBlindMode(false)} class="btn btn-error"> ไม่ใช่ </button>
-		</p>
+		{#if continueGame}
+			{#if showChoices}
+				<p class="flex gap-4">
+					<button on:click={() => answerPartyMode(true)} class="btn btn-success"> ใช่ </button>
+					<button on:click={() => answerPartyMode(false)} class="btn btn-error"> ไม่ใช่ </button>
+				</p>
+			{:else}
+				<div class="border rounded px-4 py-2">
+					{lastAnswer ? 'ใช่' : 'ไม่ใช่'}
+				</div>
 
-		{#if points > 0}
-			<p class="text-2xl">{points} คะแนน</p>
+				{#if message.length}
+					<p class="text-center">{@html message}</p>
+				{/if}
+
+				<button on:click={() => nextQuestion()} class="btn btn-success"> ต่อไป </button>
+			{/if}
+
+			{#if points > 0}
+				<p class="text-2xl">{points} คะแนน</p>
+			{/if}
+		{:else}
+			<div class="border rounded px-4 py-2">
+				{lastAnswer ? 'ใช่' : 'ไม่ใช่'}
+			</div>
+
+			{#if message.length}
+				<p class="text-center">{@html message}</p>
+			{/if}
+
+			<button on:click={() => (gameState = 'MENU')} class="btn btn-primary"> กลับหน้าแรก </button>
 		{/if}
 	{:else if gameState === 'BLIND'}
 		<h2 class="border rounded px-4 py-2">นโยบาย: {currentPolicy.policy}</h2>
 
 		<h2>เป็นของพรรคใด</h2>
 
-		<p class="flex gap-4">
-			{#each parties as party}
-				<button on:click={() => chooseParty(party.id)} class="btn btn-primary">
-					พรรค{party.name}
-				</button>
-			{/each}
-		</p>
+		{#if continueGame}
+			{#if showChoices}
+				<p class="flex gap-4">
+					{#each parties as party}
+						<button on:click={() => choosePartyBlindMode(party.id)} class="btn btn-primary">
+							พรรค{party.name}
+						</button>
+					{/each}
+				</p>
+			{:else}
+				<div class="border rounded px-4 py-2">
+					{lastAnswerParty}
+				</div>
 
-		{#if points > 0}
-			<p class="text-2xl">{points} คะแนน</p>
+				{#if message.length}
+					<p class="text-center">{@html message}</p>
+				{/if}
+
+				<button on:click={() => nextQuestion()} class="btn btn-success"> ต่อไป </button>
+			{/if}
+
+			{#if points > 0}
+				<p class="text-2xl">{points} คะแนน</p>
+			{/if}
+		{:else}
+			<div class="border rounded px-4 py-2">
+				{lastAnswerParty}
+			</div>
+
+			{#if message.length}
+				<p class="text-center">{@html message}</p>
+			{/if}
+
+			<button on:click={() => (gameState = 'MENU')} class="btn btn-primary"> กลับหน้าแรก </button>
 		{/if}
 	{/if}
 
