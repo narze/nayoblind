@@ -268,7 +268,7 @@
 	</div>
 
 	{#if gameState === 'MENU'}
-		<div class="card card-bordered shadow-xl">
+		<div class="card card-bordered bg-base-100 shadow-xl">
 			<div class="card-body items-center text-center">
 				<div class="card-title">Party Mode - เลือกพรรคแล้วทายนโยบาย (ง่าย)</div>
 				<p class="flex gap-4 mt-4 flex-wrap">
@@ -281,7 +281,7 @@
 			</div>
 		</div>
 
-		<div class="card card-bordered shadow-xl">
+		<div class="card card-bordered bg-base-100 shadow-xl">
 			<div class="card-body items-center text-center">
 				<div class="card-title">Blind Mode - ทายชื่อพรรคจากนโยบาย (ยาก)</div>
 				<p class="mt-4 mx-auto">
@@ -336,7 +336,7 @@
 
 		{#if showFbComments}
 			<hr class="h-px my-4 bg-gray-200 border-0 dark:bg-gray-700 w-full" />
-			<div class="card shadow-xl card-bordered w-full max-w-lg mb-8">
+			<div class="card shadow-xl card-bordered bg-base-100 w-full max-w-lg mb-8">
 				<div class="card-body">
 					<div class="card-title text-sm mb-4">คอมเม้นต์ + เสนอแนะ</div>
 

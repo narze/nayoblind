@@ -7,7 +7,12 @@ const config = {
 		extend: {}
 	},
 
-	plugins: [daisyui]
+	plugins: [daisyui],
+
+	daisyui: {
+		themes: ['corporate', 'business'],
+		darkTheme: 'business'
+	}
 };
 
 module.exports = config;
