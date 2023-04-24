@@ -4,6 +4,7 @@
 	import { themeChange } from 'theme-change';
 
 	import Head from '../head.svelte';
+	import Share from '../share.svelte';
 	import Adsense from '../adsense.svelte';
 
 	let darkMode = false;
@@ -413,6 +414,8 @@
 				<p class="text-center">{@html message}</p>
 			{/if}
 
+			<Share text={`ได้ ${points} คะแนน จากการทายนโยบายพรรค ${partyModeOptions.party.name}`} />
+
 			<button on:click={() => (gameState = 'MENU')} class="btn btn-primary"> กลับหน้าแรก </button>
 		{/if}
 	{:else if gameState === 'BLIND'}
@@ -452,6 +455,8 @@
 			{#if message.length}
 				<p class="text-center">{@html message}</p>
 			{/if}
+
+			<Share text={`ได้ ${points} คะแนน จากการทายนโยบาย`} />
 
 			<button on:click={() => (gameState = 'MENU')} class="btn btn-primary"> กลับหน้าแรก </button>
 		{/if}
