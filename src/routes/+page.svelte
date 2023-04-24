@@ -318,10 +318,10 @@
 		<div class="card card-bordered bg-base-100 shadow-xl">
 			<div class="card-body items-center text-center">
 				<div class="card-title">Party Mode - เลือกพรรคแล้วทายนโยบาย (ง่าย)</div>
-				<p class="flex gap-4 mt-4 flex-wrap">
+				<p class="flex gap-4 mt-4 flex-wrap justify-center">
 					{#each parties as party}
 						<button on:click={() => playPartyMode(party.id)} class="btn btn-primary">
-							พรรค{party.name}
+							{party.name}
 						</button>
 					{/each}
 				</p>
@@ -427,10 +427,10 @@
 
 		{#if continueGame}
 			{#if showChoices}
-				<p class="flex gap-4">
+				<p class="flex gap-4 flex-wrap p-4 justify-center">
 					{#each parties as party}
 						<button on:click={() => choosePartyBlindMode(party.id)} class="btn btn-primary">
-							พรรค{party.name}
+							{party.name}
 						</button>
 					{/each}
 				</p>
