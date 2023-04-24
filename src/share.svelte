@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Facebook, Twitter, Line } from 'svelte-share-buttons-component';
 
-	export let url = 'https://nayoblind.vercel.app/';
+	export let url = 'https://nayoblind.narze.live/';
 	export let text: string;
 </script>
 

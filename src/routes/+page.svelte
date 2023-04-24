@@ -297,7 +297,7 @@
 <Head
 	title="Nayoblind"
 	description="ทดสอบความจำนโยบายเลือกตั้ง 2566"
-	url="https://nayoblind.vercel.app"
+	url="https://nayoblind.narze.live"
 	imageUrl="https://raw.githubusercontent.com/narze/timelapse/main/projects/nayoblind_home.png"
 	gtagId="G-17QSJGM9H5"
 />
@@ -483,7 +483,7 @@
 
 					<div
 						class="fb-comments"
-						data-href="https://nayoblind.vercel.app/"
+						data-href="https://nayoblind.narze.live/"
 						data-width="100%"
 						data-numposts="10"
 						data-colorscheme={darkMode ? 'dark' : 'light'}
